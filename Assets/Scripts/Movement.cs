@@ -11,10 +11,12 @@ public class Movement : MonoBehaviour
     private float hover_offset_magnitude = 0;
     private float hover_offset = 0;
 
+    const float BASE_MAG = (1.0f / 3.0f);
+
     // Start is called before the first frame update
     void Start()
     {
-        hover_offset_magnitude = Random.Range(-0.2f, 0.2f);
+        hover_offset_magnitude = BASE_MAG * Random.Range(0.5f, 1.5f);
     }
 
     // Update is called once per frame
@@ -26,6 +28,7 @@ public class Movement : MonoBehaviour
         Terrain terrain = Terrain.activeTerrain;
 
         float invert_rotation = 1;
+        float moving_mod = 1;
 
         // translate by 'move_speed' on Z axis each frame for as long as
         // the space bar is held down
@@ -33,11 +36,13 @@ public class Movement : MonoBehaviour
         {
             transform.Translate(0, 0, move_speed * Time.deltaTime);
             invert_rotation = 1;
+            moving_mod = 0;
         }
         if (Input.GetKey(KeyCode.S))
         {
             transform.Translate(0, 0, -move_speed * Time.deltaTime);
             invert_rotation = -1;
+            moving_mod = 0;
         }
         if (Input.GetKey(KeyCode.A))
             transform.Rotate(0, -move_speed * Time.deltaTime * invert_rotation, 0);
@@ -47,13 +52,12 @@ public class Movement : MonoBehaviour
 
         Vector3 position = transform.position;
 
-        float base_mag = (1.0f / 3.0f) + hover_offset_magnitude;
-        hover_offset = Mathf.Sin(Time.time * 2.5f) * base_mag;
+        hover_offset = Mathf.Sin(Time.time * 2.5f) * hover_offset_magnitude;
 
         // Set hover_offset_magnitude to a random value when hover_offset is close to y = 0;
         if (Mathf.Abs(hover_offset) < 0.01f)
         {
-            hover_offset_magnitude = Random.Range(-0.2f, 0.2f);
+            hover_offset_magnitude = BASE_MAG * Random.Range(0.5f, 1.5f) * moving_mod;
             //Debug.LogFormat("Set hover_offset_magnitude to {0}.", hover_offset_magnitude);
         }
 
