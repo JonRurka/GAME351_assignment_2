@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
 
     private float hover_offset_magnitude = 0;
     private float hover_offset = 0;
+    private float turn_tilt = 0;
 
     const float BASE_MAG = (1.0f / 3.0f);
 
@@ -45,9 +46,18 @@ public class Movement : MonoBehaviour
             moving_mod = 0;
         }
         if (Input.GetKey(KeyCode.A))
+        {
+            //turn_tilt * Time.deltaTime in third parameter of transform.Rotate()
             transform.Rotate(0, -move_speed * Time.deltaTime * invert_rotation, 0);
+            turn_tilt--;
+        }
+ 
         if (Input.GetKey(KeyCode.D))
+        {
+            //turn_tilt * Time.deltaTime in third parameter of transform.Rotate()
             transform.Rotate(0, move_speed * Time.deltaTime * invert_rotation, 0);
+            turn_tilt++;
+        }
 
 
         Vector3 position = transform.position;
@@ -65,7 +75,20 @@ public class Movement : MonoBehaviour
         position.y = terrain.GetPosition().y + terrain.SampleHeight(position) + ground_offset + hover_offset;
         transform.position = position;
 
-        
+
+        //Quaternion rotation = transform.rotation;
+
+         // Slowly sets the game object's tilt position (the Z-axis) back to zero while it does not turn (That is the intention, at least!)
+        if (turn_tilt <= 0)
+        {
+            turn_tilt++;
+        }
+        else if (turn_tilt >= 0)
+        {
+            turn_tilt--;
+        }
+        //rotation.z = turn_tilt;
+        //print(turn_tilt);        
 
     }
 }
