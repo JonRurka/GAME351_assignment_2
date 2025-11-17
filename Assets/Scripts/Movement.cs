@@ -39,11 +39,15 @@ public class Movement : MonoBehaviour
         Vector3 position = body.transform.position;
 
         float F = terrain.SampleHeight(position + body.transform.forward * forward_span);
+        float R = terrain.SampleHeight(position + body.transform.right);
         float O = terrain.SampleHeight(position);
         Vector3 p1 = new Vector3(0, O, 0);
         Vector3 p2 = new Vector3(0, F, forward_span);
+        Vector3 p3 = new Vector3(1, R, 0);
         Vector3 fnormal_local = (p2 - p1).normalized;
+        Vector3 rnormal_local = (p3 - p1).normalized;
         Vector3 forward_normal = body.transform.TransformDirection(fnormal_local);
+        
 
         float invert_rotation = 1;
         float moving_mod = 1;
@@ -98,12 +102,18 @@ public class Movement : MonoBehaviour
         //Vector3 forward
         //Debug.DrawRay(new Vector3(position.x, terrain.transform.position.y + O + 1f, position.z), forward_normal * 5, Color.red);
         //model.up = normal;
+
         model.forward = forward_normal;
+
+        Vector3 right_normal = model.TransformDirection(rnormal_local);
+        //model.right = right_normal;
+        //model.right = Vector3.Lerp(model.right, right_normal, Time.deltaTime);
 
 
         // ground clip protection.
         //body.transform.position = new Vector3(position.x, Mathf.Max(terrain.transform.position.y + O + 3, position.y, 0), position.z);
         //body.transform.position = new Vector3(position.x, Mathf.Min(terrain.transform.position.y + O + 20, position.y), position.z);
+
 
         // set the game object's translation (not an increment)
         //position.y = terrain.GetPosition().y + terrain.SampleHeight(position) + ground_offset + hover_offset;
