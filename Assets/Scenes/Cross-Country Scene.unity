@@ -656,7 +656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2043148791
 Transform:
   m_ObjectHideFlags: 0
@@ -688,4 +688,7 @@ MonoBehaviour:
   move_speed: 10
   turn_speed: 20
   ground_offset: 1
+  forward_span: 5
+  canFireLasers: 0
+  laserPrefab: {fileID: 0}
   model: {fileID: 0}
