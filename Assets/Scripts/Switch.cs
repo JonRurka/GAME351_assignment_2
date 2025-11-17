@@ -5,23 +5,32 @@ using UnityEngine;
 public class Switch : MonoBehaviour
 {
     [SerializeField]
-    private GameObject prefab;
-    [SerializeField]
-    private GameObject prefab2;
+    public GameObject[] cars;
+
+
+    public GameObject current_car_obj;
+
+    private int curCarIdx;
 
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(prefab, transform.position, transform.rotation);
+        current_car_obj = Instantiate(cars[curCarIdx], transform.position, transform.rotation);
+        curCarIdx = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            Destroy(gameObject);
-            Instantiate(prefab2, transform.position, transform.rotation);
+            Destroy(current_car_obj);
+            curCarIdx++;
+            if (curCarIdx >= cars.Length)
+            {
+                curCarIdx = 0;
+            }
+            current_car_obj = Instantiate(cars[curCarIdx], transform.position, transform.rotation);
         }
     }
 }

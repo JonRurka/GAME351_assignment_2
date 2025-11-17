@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour
     private float hover_offset_magnitude = 0;
     private float hover_offset = 0;
     private float turn_tilt = 0;
-    public Rigidbody body;
+    private Rigidbody body;
 
     const float BASE_MAG = (1.0f / 3.0f);
 
