@@ -8,9 +8,12 @@ public class Movement : MonoBehaviour
     public float turn_speed = 20f;
     public float ground_offset = 1.0f;
 
+    public Transform model;
+
     private float hover_offset_magnitude = 0;
     private float hover_offset = 0;
     private float turn_tilt = 0;
+    public Rigidbody body;
 
     const float BASE_MAG = (1.0f / 3.0f);
 
@@ -18,6 +21,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         hover_offset_magnitude = BASE_MAG * Random.Range(0.5f, 1.5f);
+        body = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -35,32 +39,33 @@ public class Movement : MonoBehaviour
         // the space bar is held down
         if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(0, 0, move_speed * Time.deltaTime);
+            body.transform.Translate(0, 0, move_speed * Time.deltaTime);
             invert_rotation = 1;
             moving_mod = 0;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(0, 0, -move_speed * Time.deltaTime);
+            body.transform.Translate(0, 0, -move_speed * Time.deltaTime);
             invert_rotation = -1;
             moving_mod = 0;
         }
         if (Input.GetKey(KeyCode.A))
         {
             //turn_tilt * Time.deltaTime in third parameter of transform.Rotate()
-            transform.Rotate(0, -move_speed * Time.deltaTime * invert_rotation, 0);
+            body.transform.Rotate(0, -move_speed * Time.deltaTime * invert_rotation, 0);
             turn_tilt--;
         }
  
         if (Input.GetKey(KeyCode.D))
         {
             //turn_tilt * Time.deltaTime in third parameter of transform.Rotate()
-            transform.Rotate(0, move_speed * Time.deltaTime * invert_rotation, 0);
+            body.transform.Rotate(0, move_speed * Time.deltaTime * invert_rotation, 0);
             turn_tilt++;
         }
 
 
-        Vector3 position = transform.position;
+        Vector3 localposition = model.localPosition;
+        Vector3 position = body.transform.position;
 
         hover_offset = Mathf.Sin(Time.time * 2.5f) * hover_offset_magnitude;
 
@@ -71,14 +76,35 @@ public class Movement : MonoBehaviour
             //Debug.LogFormat("Set hover_offset_magnitude to {0}.", hover_offset_magnitude);
         }
 
+        localposition.y = hover_offset;
+        model.localPosition = localposition;
+
+        //float R = terrain.SampleHeight(body.transform.position + body.transform.right * 1);
+        //float L = terrain.SampleHeight(body.transform.position + -body.transform.right * 1);
+        float F = terrain.SampleHeight(position + body.transform.forward * 5);
+        float O = terrain.SampleHeight(position);
+        Vector3 p1 = new Vector3(0, O, 0);
+        Vector3 p2 = new Vector3(0, F, 5);
+        Vector3 forward_normal = body.transform.TransformDirection((p2 - p1).normalized);
+        //Vector3 normal = new Vector3(-2 * (R - L), 4, 2 * (B - T)).normalized;
+        //Vector3 forward
+        Debug.DrawRay(new Vector3(position.x, terrain.transform.position.y + O + 1f, position.z), forward_normal * 5, Color.red);
+        //model.up = normal;
+        model.forward = forward_normal;
+
+
+        // ground clip protection.
+        body.transform.position = new Vector3(position.x, Mathf.Max(terrain.transform.position.y + O + 3, position.y, 0), position.z);
+        //body.transform.position = new Vector3(position.x, Mathf.Min(terrain.transform.position.y + O + 20, position.y), position.z);
+
         // set the game object's translation (not an increment)
-        position.y = terrain.GetPosition().y + terrain.SampleHeight(position) + ground_offset + hover_offset;
-        transform.position = position;
+        //position.y = terrain.GetPosition().y + terrain.SampleHeight(position) + ground_offset + hover_offset;
+        //transform.position = position;
 
 
         //Quaternion rotation = transform.rotation;
 
-         // Slowly sets the game object's tilt position (the Z-axis) back to zero while it does not turn (That is the intention, at least!)
+        // Slowly sets the game object's tilt position (the Z-axis) back to zero while it does not turn (That is the intention, at least!)
         if (turn_tilt <= 0)
         {
             turn_tilt++;

@@ -677,7 +677,6 @@ GameObject:
   - component: {fileID: 1741039105}
   - component: {fileID: 1741039104}
   - component: {fileID: 1741039103}
-  - component: {fileID: 1741039102}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -700,18 +699,6 @@ Transform:
   m_Father: {fileID: 1963364898}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 23.328, y: 0, z: 0}
---- !u!114 &1741039102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741039100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54a72bf433c9ad745bc900f4634b5a6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1741039103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -806,6 +793,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1963364898}
   - component: {fileID: 1963364899}
+  - component: {fileID: 1963364901}
+  - component: {fileID: 1963364900}
   m_Layer: 0
   m_Name: Craft Type1
   m_TagString: Untagged
@@ -821,7 +810,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1963364897}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.055958, y: 58.411842, z: 45.060707}
+  m_LocalPosition: {x: -16.055958, y: 59.67, z: 45.060707}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -845,6 +834,38 @@ MonoBehaviour:
   move_speed: 50
   turn_speed: 60
   ground_offset: 15
+  model: {fileID: 1522369322}
+  body: {fileID: 0}
+--- !u!54 &1963364900
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963364897}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!136 &1963364901
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963364897}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: -5.5, z: 0}
 --- !u!1 &2043148790
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,3 +914,5 @@ MonoBehaviour:
   move_speed: 10
   turn_speed: 20
   ground_offset: 1
+  model: {fileID: 0}
+  body: {fileID: 0}
